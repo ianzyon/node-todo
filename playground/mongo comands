@@ -23,3 +23,76 @@
     });
 
     // res.ops[0]._id.getTimestamp() para recuperar o timestamp
+
+
+    mongoose comands
+
+    var Todo = mongoose.model('Todo', {
+    text: {
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true
+    },
+    completed: {
+        type: Boolean,
+        default: false
+    },
+    completedAt: {
+        type: String,
+        default: null
+    }
+});
+var date = Date();
+var newTodo = new Todo({
+    text: " Edit the video",
+    completed: false,
+    completedAt: date
+});
+newTodo.save().then(
+    (doc) => {
+        console.log('Save todo: ',doc);
+    }, (e) => {
+        console.log("Unable to save todo");
+    } 
+);
+// user model
+//emai - required - trim - string - min lenght
+
+var User = mongoose.model('User', {
+    name: {
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true
+    },
+    age: {
+        type: Number,
+        default: 1
+    },
+    city: {
+        type: String,
+        default: null
+    },
+    email: {
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true
+    }
+});
+
+var nUser = new User({
+    name: "Carlos",
+    age: 28,
+    city: "Belem",
+    email: "  carlos@meuemail.com.br"
+});
+// função salvar
+nUser.save().then(
+    (doc) => {
+        console.log('Saved User: ',doc);
+    }, (e) => {
+        console.log("Unable to save user");
+    } 
+);
