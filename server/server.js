@@ -25,6 +25,19 @@ app.post('/todos',
 }
 );
 
+app.get('/todos', 
+(req, res)=>{
+    
+    Todo.find().then(
+        (todos) => {      // VVV objeto contendo o vetor(sintaxe ES5, todos: todos), pode ser configurado e nao limita as propriedades de array   
+            res.send({todos});
+        }, // success promise
+        (e) => {
+            res.status(400).send(e);
+        } // rejectd promise
+    )
+})
+
 app.listen(3000, 
 ()=> {
     console.log('Started on port 3000');
