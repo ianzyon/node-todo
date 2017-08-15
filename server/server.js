@@ -8,7 +8,7 @@ var {User} = require('./models/user');
 var app = express();
 //midleware
 app.use(bodyParser.json()); //retorna uma função por isso é aceito pelo middleware
-
+// rota que inclui dados no banco de dados com um POST request  
 app.post('/todos', 
 (req, res) => { //request, result
     var todo = new Todo({
@@ -30,3 +30,7 @@ app.listen(3000,
     console.log('Started on port 3000');
 }
 );
+
+module.exports = {
+    app
+};
