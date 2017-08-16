@@ -9,15 +9,14 @@ var id = '599106ca41475c1be4a3ca46';
 if (!ObjectID.isValid(id)) {
     console.log("ID not Valid");
 }
-
-/*Todo.find({
-    _id: id // mongoose nao necessita do Object ID 
+// mongoose nao necessita do Object ID 
+Todo.find({
 }).then(
     (todos)=>{
         console.log('Todos', todos);
     })
 
-Todo.findOne({
+/*Todo.findOne({
    _id: id 
 }).then((todo)=>{
     console.log('Todo', todo);
@@ -33,9 +32,9 @@ Todo.findOne({
     console.log('Todo by id', todo);
 }).catch((e) => console.log(e));*/
 
-User.findById(id).then((user)=>{ // quando o find disparar fazer
+/*User.findById(id).then((user)=>{ // quando o find disparar fazer
     if(!user) { // se nao houver retorno para o find
         return console.log("Id not found");
     }
     console.log("User ", user);
-}).catch((e) => console.log(e));
+}).catch((e) => console.log(e));*/

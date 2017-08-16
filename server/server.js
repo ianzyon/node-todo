@@ -61,6 +61,27 @@ app.get('/todos/:id',
     )
 });
 
+// rota para deleção
+app.delete('/todos/:id',
+(req, res) => {
+    let id = req.params.id; // propriedade id da requisicao http
+    if (!ObjectID.isValid(id)) {
+        return res,status(404).send({ error: "INVALID_ID"});
+        console.log('error invalid id');
+    }
+    Todo.findByIdAndRemove(id).then(
+        (todoD) => {
+            if (!todoD) {
+                return res.send({ error: "NOT_FOUND"});
+                console.log('error not found');
+            }
+            res.send({todoD});
+            console.log(todoD);
+        },
+        (e) => { res.status(400).send(e)}
+    ); 
+});
+
 app.listen(port, 
 ()=> {
     console.log(`Started on port ${port}`);
