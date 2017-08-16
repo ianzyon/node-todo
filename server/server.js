@@ -6,7 +6,12 @@ var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
+// endereço do api // https://secret-hamlet-21533.herokuapp.com/
+
 var app = express();
+// enverioment port variable
+const port = process.env.PORT || 3000;
+
 //midleware
 app.use(bodyParser.json()); //retorna uma função por isso é aceito pelo middleware
 // rota que inclui dados no banco de dados com um POST request  
@@ -56,9 +61,9 @@ app.get('/todos/:id',
     )
 });
 
-app.listen(3000, 
+app.listen(port, 
 ()=> {
-    console.log('Started on port 3000');
+    console.log(`Started on port ${port}`);
 }
 );
 
