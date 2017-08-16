@@ -6,7 +6,7 @@ const {ObjectID} = require('mongodb');
 const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
-
+var {authenticate} = require('./middleware/auth');
 // endereço do api // https://secret-hamlet-21533.herokuapp.com/
 
 var app = express();
@@ -159,6 +159,11 @@ app.get('/user',
     )
 });
 
+// autenticação private route
+app.get('/user/me', authenticate,
+(req, res)=>{
+   res.send(req.user);
+});
 
 app.listen(port, 
 ()=> {
