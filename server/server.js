@@ -15,7 +15,8 @@ const port = process.env.PORT || 3000;
 
 //midleware
 app.use(bodyParser.json()); //retorna uma função por isso é aceito pelo middleware
-// rota que inclui dados no banco de dados com um POST request  
+
+// rota para 'todos' que inclui dados no banco de dados com um POST request  
 app.post('/todos', 
 (req, res) => { //request, result
     var todo = new Todo({
@@ -122,6 +123,42 @@ app.patch('/todos/:id',
             }
         );
 });
+// rota para post user
+app.post('/user', 
+    (req, res) => { //request, result
+        var body = _.pick(req.body, ['name','password', 'email','age','city']) 
+        var user = new User(body);
+
+        user.save().then(
+            (doc) => {
+                return user.generateAuthToken();
+            }
+        )
+        .then((token) => {
+            res.header('x-auth', token).send(user);
+        }
+        )
+        .catch((e) => {
+                res.status(400).send(e);
+                }
+        );
+
+    }
+);
+// get all user
+app.get('/user', 
+(req, res)=>{
+    
+    User.find().then(
+        (users) => {   
+            res.send({users});
+        }, // success promise
+        (e) => {
+            res.status(400).send(e);
+        } // rejectd promise
+    )
+});
+
 
 app.listen(port, 
 ()=> {
