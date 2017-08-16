@@ -1,10 +1,11 @@
-var bodyParser = require('body-parser');
-var express = require('express');
+const bodyParser = require('body-parser');
+const express = require('express');
+const _ = require('lodash');
 
-var {ObjectID} = require('mongodb');
-var {mongoose} = require('./db/mongoose');
-var {Todo} = require('./models/todo');
-var {User} = require('./models/user');
+const {ObjectID} = require('mongodb');
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
 // endereço do api // https://secret-hamlet-21533.herokuapp.com/
 
@@ -66,7 +67,7 @@ app.delete('/todos/:id',
 (req, res) => {
     let id = req.params.id; // propriedade id da requisicao http
     if (!ObjectID.isValid(id)) {
-        return res,status(404).send({ error: "INVALID_ID"});
+        return res.status(404).send({ error: "INVALID_ID"});
         console.log('error invalid id');
     }
     Todo.findByIdAndRemove(id).then(
@@ -80,6 +81,46 @@ app.delete('/todos/:id',
         },
         (e) => { res.status(400).send(e)}
     ); 
+});
+// update db
+app.patch('/todos/:id',
+(req,res)=> {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['text','completed']); //verifica e recupera as propriedades especificadas no array
+    
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send({ error: "INVALID_ID"});
+        console.log('error invalid id');
+    }
+    // se for completado troca o completed para true
+    if(_.isBoolean(body.completed)&& body.completed) {
+        body.completedAt = Date();
+    } else {
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(
+            // identificador
+            id, // update operator 
+            {
+                $set: body
+            }, // opcionais 
+            {
+                new: true
+            }
+        ).then(
+            (todo) => {
+                if (!todo) {
+                    return res.status(404).send({ error: "NOT_FOUND"});
+                }
+
+                res.send({todo});
+            }, (e) => {
+                console.log('Error');
+                res.status(400).send({e});
+            }
+        );
 });
 
 app.listen(port, 
