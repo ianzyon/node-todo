@@ -8,8 +8,7 @@ var authenticate = (req, res, next) => {
         (user) => {
             if (!user) {
                res.status(400).send({error: 'NOT_FOUND'});
-            }
-
+            } 
             req.user = user;
             req.token = token;
             next();

@@ -164,6 +164,36 @@ app.get('/user/me', authenticate,
 (req, res)=>{
    res.send(req.user);
 });
+// post /user/login {email, password}
+app.post('/user/login',
+    (req, res) => {
+        var body = _.pick(req.body, ['email', 'password']);
+
+        User.findByCredentials(body.email,body.password).then(
+            (user)=>{
+                user.generateAuthToken().then((token)=>{
+                    res.header('x-auth', token).send(user);
+                });
+            }
+        ).catch((e)=>{ res.status(400).send({error: "WRONG_PASSWORD"})});
+    }   
+);
+// loggout delete route
+
+app.delete('/user/me/token', authenticate, (req,res)=>{
+    
+    try {
+        req.user.removeToken(req.token).then((user)=>{
+            res.status(200).send(user);
+        }, (e)=>{ res.status(400).send(e);
+        });
+    } catch(err) {
+        console.log("USER_NULL");
+    }
+    
+    
+});
+
 
 app.listen(port, 
 ()=> {
