@@ -33,7 +33,7 @@ app.post('/todos',
 }
 );
 
-app.get('/todos', 
+app.get('/todos', authenticate,
 (req, res)=>{
     
     Todo.find().then(
@@ -46,7 +46,7 @@ app.get('/todos',
     )
 });
 // get um individual todo
-app.get('/todos/:id', 
+app.get('/todos/:id', authenticate,
 (req, res)=>{
     let id = req.params.id;
     if (!ObjectID.isValid(id)) { return res.status(404).send({ error: "INVALID_ID"}); }
@@ -64,7 +64,7 @@ app.get('/todos/:id',
 });
 
 // rota para deleção
-app.delete('/todos/:id',
+app.delete('/todos/:id', authenticate,
 (req, res) => {
     let id = req.params.id; // propriedade id da requisicao http
     if (!ObjectID.isValid(id)) {
@@ -84,7 +84,7 @@ app.delete('/todos/:id',
     ); 
 });
 // update db
-app.patch('/todos/:id',
+app.patch('/todos/:id', authenticate,
 (req,res)=> {
     var id = req.params.id;
     var body = _.pick(req.body, ['text','completed']); //verifica e recupera as propriedades especificadas no array
@@ -124,7 +124,7 @@ app.patch('/todos/:id',
         );
 });
 // rota para post user
-app.post('/user', 
+app.post('/user', authenticate, 
     (req, res) => { //request, result
         var body = _.pick(req.body, ['name','password', 'email','age','city']) 
         var user = new User(body);
@@ -146,7 +146,7 @@ app.post('/user',
     }
 );
 // get all user
-app.get('/user', 
+app.get('/user', authenticate,
 (req, res)=>{
     
     User.find().then(
